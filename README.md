@@ -19,8 +19,6 @@ So I built TripSketch. You tell it where you want to go and what kind of trip yo
 **OpenTripMap API** — This is the main one. It's great for finding hidden gems, local landmarks, and offbeat places by location and category. Free to use.
 → https://opentripmap.io/docs
 
-**Foursquare Places API** — Used to get richer details on each place — ratings, photos, price levels, and real tips from people who've actually been there. Also free.
-→ https://developer.foursquare.com/docs
 
 ---
 

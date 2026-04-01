@@ -1,0 +1,501 @@
+/* ==========================================================================
+   TripSketch Landing — CSS
+   A cinematic, scroll-driven landing experience
+   ========================================================================== */
+
+/* ---------- Reset & Base ---------- */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --color-cream: #faf5ee;
+  --color-ink: #2c2418;
+  --color-ink-soft: #5a4e3c;
+  --color-accent: #c0956e;
+  --color-accent-light: #dbb895;
+  --color-glass-bg: rgba(250, 245, 238, 0.12);
+  --color-glass-border: rgba(250, 245, 238, 0.18);
+  --color-glass-bg-dark: rgba(44, 36, 24, 0.25);
+
+  --font-display: 'Playfair Display', 'Georgia', serif;
+  --font-hand: 'Caveat', cursive;
+  --font-body: 'Inter', -apple-system, sans-serif;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+body {
+  background: #1a1610;
+  color: var(--color-cream);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+}
+
+/* ---------- Preloader ---------- */
+#preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #1a1610;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.8s var(--ease-out-expo), visibility 0.8s;
+}
+
+#preloader.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.preloader-inner {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.preloader-sketch {
+  width: 64px;
+  height: 64px;
+  color: var(--color-accent);
+}
+
+.preloader-icon {
+  width: 100%;
+  height: 100%;
+}
+
+.sketch-path {
+  stroke-dasharray: 120;
+  stroke-dashoffset: 120;
+  animation: drawPath 2s var(--ease-out-expo) infinite;
+}
+
+.sketch-dot {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes drawPath {
+  0% { stroke-dashoffset: 120; }
+  50% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: -120; }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.3; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+.preloader-text {
+  font-family: var(--font-hand);
+  font-size: 1.4rem;
+  color: var(--color-accent-light);
+  letter-spacing: 0.02em;
+}
+
+.preloader-bar {
+  width: 200px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.preloader-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--color-accent), var(--color-accent-light));
+  border-radius: 4px;
+  transition: width 0.15s ease-out;
+}
+
+.preloader-percent {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  color: rgba(250, 245, 238, 0.35);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.08em;
+}
+
+/* ---------- Canvas ---------- */
+#frameCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+  background: #1a1610;
+}
+
+/* ---------- Scroll Container (creates scroll height) ---------- */
+#scrollContainer {
+  position: relative;
+  z-index: 0;
+  height: 500vh; /* Scroll length — 5x viewport */
+}
+
+/* ---------- UI Overlay ---------- */
+#uiOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+}
+
+#uiOverlay a,
+#uiOverlay button {
+  pointer-events: auto;
+}
+
+/* ---------- Navbar ---------- */
+#navbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 2.5rem;
+  background: var(--color-glass-bg);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  border-bottom: 1px solid var(--color-glass-border);
+  pointer-events: auto;
+  z-index: 100;
+  transition: transform 0.5s var(--ease-out-expo), opacity 0.5s var(--ease-out-expo);
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  text-decoration: none;
+  color: var(--color-cream);
+}
+
+.nav-logo {
+  width: 28px;
+  height: 28px;
+  color: var(--color-accent-light);
+}
+
+.nav-brand span {
+  font-family: var(--font-hand);
+  font-size: 1.55rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+}
+
+.nav-link {
+  color: rgba(250, 245, 238, 0.7);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  transition: color 0.3s ease;
+  position: relative;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--color-accent-light);
+  transition: width 0.3s var(--ease-out-expo);
+}
+
+.nav-link:hover {
+  color: var(--color-cream);
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* ---------- Hero Content Container ---------- */
+.hero-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------- Text Sections ---------- */
+.text-section {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  opacity: 0;
+  transform: translateY(30px);
+  will-change: opacity, transform;
+}
+
+/* Dark scrim behind text for readability */
+.text-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 50% at center, rgba(20, 16, 10, 0.55) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.text-section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.text-eyebrow {
+  font-family: var(--font-hand);
+  font-size: 1.2rem;
+  color: var(--color-accent-light);
+  margin-bottom: 1rem;
+  letter-spacing: 0.06em;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+}
+
+.text-headline {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 7vw, 5.5rem);
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--color-cream);
+  margin-bottom: 1.2rem;
+  text-shadow:
+    0 4px 40px rgba(0, 0, 0, 0.7),
+    0 2px 10px rgba(0, 0, 0, 0.6),
+    0 0 80px rgba(0, 0, 0, 0.3);
+}
+
+.text-headline em {
+  font-style: italic;
+  color: var(--color-accent-light);
+}
+
+.text-sub {
+  font-family: var(--font-body);
+  font-size: clamp(0.95rem, 2vw, 1.15rem);
+  color: rgba(250, 245, 238, 0.85);
+  font-weight: 400;
+  max-width: 420px;
+  line-height: 1.6;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.7), 0 1px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* ---------- Scroll Indicator ---------- */
+.scroll-indicator {
+  margin-top: 2.5rem;
+  animation: floatUp 2.5s ease-in-out infinite;
+}
+
+.scroll-mouse {
+  width: 24px;
+  height: 38px;
+  border: 2px solid rgba(250, 245, 238, 0.4);
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  padding-top: 8px;
+}
+
+.scroll-wheel {
+  width: 3px;
+  height: 8px;
+  background: rgba(250, 245, 238, 0.6);
+  border-radius: 2px;
+  animation: scrollWheel 2s ease-in-out infinite;
+}
+
+@keyframes floatUp {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes scrollWheel {
+  0% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(10px); }
+}
+
+/* ---------- CTA Button ---------- */
+.cta-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 2rem;
+  padding: 1rem 2.2rem;
+  background: linear-gradient(135deg, rgba(192, 149, 110, 0.25), rgba(192, 149, 110, 0.15));
+  backdrop-filter: blur(16px) saturate(1.3);
+  -webkit-backdrop-filter: blur(16px) saturate(1.3);
+  border: 1px solid rgba(219, 184, 149, 0.3);
+  border-radius: 100px;
+  color: var(--color-cream);
+  text-decoration: none;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: all 0.4s var(--ease-out-expo);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.cta-button:hover {
+  background: linear-gradient(135deg, rgba(192, 149, 110, 0.4), rgba(192, 149, 110, 0.25));
+  border-color: rgba(219, 184, 149, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(192, 149, 110, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.cta-arrow {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s var(--ease-out-expo);
+}
+
+.cta-button:hover .cta-arrow {
+  transform: translateX(4px);
+}
+
+/* ---------- Bottom Vignette ---------- */
+.bottom-vignette {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 180px;
+  background: linear-gradient(to top, rgba(26, 22, 16, 0.5), transparent);
+  pointer-events: none;
+}
+
+/* ---------- Canvas Vignette Overlay ---------- */
+#frameCanvas::after {
+  content: '';
+}
+
+/* We create the vignette with a pseudo on the overlay instead */
+#uiOverlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at center, transparent 50%, rgba(26, 22, 16, 0.35) 100%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+  #navbar {
+    padding: 1rem 1.5rem;
+  }
+
+  .nav-links {
+    gap: 1.2rem;
+  }
+
+  .nav-link {
+    font-size: 0.8rem;
+  }
+
+  .nav-brand span {
+    font-size: 1.3rem;
+  }
+
+  .text-eyebrow {
+    font-size: 1rem;
+  }
+
+  .text-headline {
+    font-size: clamp(2rem, 8vw, 3.5rem);
+  }
+
+  .text-sub {
+    font-size: 0.9rem;
+    max-width: 300px;
+  }
+
+  .cta-button {
+    padding: 0.85rem 1.8rem;
+    font-size: 0.9rem;
+  }
+
+  #scrollContainer {
+    height: 400vh;
+  }
+}
+
+@media (max-width: 480px) {
+  #navbar {
+    padding: 0.85rem 1rem;
+  }
+
+  .nav-links {
+    gap: 0.8rem;
+  }
+
+  .nav-link {
+    font-size: 0.75rem;
+  }
+
+  .text-headline {
+    font-size: clamp(1.8rem, 9vw, 3rem);
+  }
+
+  .cta-button {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.85rem;
+  }
+}
+
+/* ---------- Selection ---------- */
+::selection {
+  background: rgba(192, 149, 110, 0.35);
+  color: var(--color-cream);
+}
+
+/* ---------- Scrollbar (subtle) ---------- */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(192, 149, 110, 0.25);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(192, 149, 110, 0.4);
+}
