@@ -30,7 +30,7 @@ const UI = (() => {
 
   function getCategoryLabel(kinds) {
     if (!kinds) return 'Attraction';
-    const first = kinds.split(',')[0]?.trim() || '';
+    const first = (kinds || '').split(',')[0]?.trim() || '';
     return first.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) || 'Attraction';
   }
 
@@ -60,8 +60,9 @@ const UI = (() => {
     const heartCls = isSaved ? 'card-heart saved' : 'card-heart';
     const heartIcon= isSaved ? '❤️' : '🤍';
 
+    // Use a data-emoji attribute + a clean onerror that swaps the img for a placeholder div
     const imgHTML = place.photo
-      ? `<img class="card-img" src="${place.photo}" alt="${place.name}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\"card-img-placeholder\\">${emoji}</div>'" />`
+      ? `<img class="card-img" src="${place.photo}" alt="${place.name}" loading="lazy" data-emoji="${emoji}" onerror="var w=this.parentElement;var d=document.createElement('div');d.className='card-img-placeholder';d.textContent=this.dataset.emoji;w.replaceChild(d,this)" />`
       : `<div class="card-img-placeholder">${emoji}</div>`;
 
     const descHTML = place.desc

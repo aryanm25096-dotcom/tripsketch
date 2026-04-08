@@ -276,6 +276,9 @@
        // Stop RAF
        cancelAnimationFrame(rafId);
        
+       // Mark app as active — lets explore.css apply cream body background
+       document.documentElement.classList.add('app-active');
+       
        // Fade in app container
        const app = document.getElementById('appContainer');
        app.style.display = 'block';

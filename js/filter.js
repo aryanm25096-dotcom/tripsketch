@@ -11,9 +11,9 @@ const Filter = (() => {
     if (!keyword || keyword.trim() === '') return places;
     const kw = keyword.toLowerCase().trim();
     return places.filter(p =>
-      p.name.toLowerCase().includes(kw) ||
-      p.kinds.toLowerCase().includes(kw) ||
-      (p.desc || '').toLowerCase().includes(kw)
+      (p.name  || '').toLowerCase().includes(kw) ||
+      (p.kinds || '').toLowerCase().includes(kw) ||
+      (p.desc  || '').toLowerCase().includes(kw)
     );
   }
 

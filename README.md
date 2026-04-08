@@ -4,6 +4,8 @@ You know that feeling when you and your friends are planning a trip but every we
 
 TripSketch helps you find **offbeat, budget-friendly spots** that actually match your vibe — and shows them in a way that feels like flipping through a travel sketchbook, not scrolling through a boring list.
 
+🔗 **Live demo:** [aryanm25096-dotcom.github.io/tripsketch](https://aryanm25096-dotcom.github.io/tripsketch)
+
 ---
 
 ## 😤 The Problem
@@ -16,100 +18,120 @@ So I built TripSketch. You tell it where you want to go and what kind of trip yo
 
 ## 🌐 APIs Used
 
-**OpenTripMap API** — This is the main one. It's great for finding hidden gems, local landmarks, and offbeat places by location and category. Free to use.
+**OpenTripMap API** — Main data source. Finds hidden gems, local landmarks, and offbeat places by location and category.  
 → https://opentripmap.io/docs
 
+**Foursquare Places API** — Enriches results with ratings, photos, and descriptions.  
+→ https://developer.foursquare.com
+
+**wttr.in** — No-key weather API. Shows current conditions at your destination.  
+→ https://wttr.in
+
+**Wikipedia REST API** — Fallback photo source when other APIs don't have an image.  
+→ https://en.wikipedia.org/api/rest_v1
+
+**Leaflet.js + OpenStreetMap** — Interactive map view with place markers.  
+→ https://leafletjs.com
 
 ---
 
-## ✨ What it does
+## ✨ Features
 
-- You fill out a quick form — where you're starting from, where you want to go, your budget, whether you're going solo or with friends, and how much crowd you can handle
-- It fetches real places using the APIs above
-- You can **search, filter, and sort** the results however you want
-- Save your favorite spots so you don't lose them
-- The whole thing looks like a hand-drawn travel journal — not a bootstrap template
-
-### Features I'm building
-
-- Trip vibe form to collect your preferences
-- Place cards styled like polaroids / journal pages
-- Search by name or keyword
-- Filter by category (nature, food, culture, adventure) and crowd level
-- Sort by rating, distance, or price
-- Save favorites to localStorage so they stay even after you close the tab
-- Dark mode because obviously
-- Fully responsive — works on your phone too
-
-### Bonus stuff (if I have time)
-- Debounced search so it's not firing on every keystroke
-- Pagination for when results are too many
-- Weather preview at the destination
+- **Cinematic landing page** — Scroll-driven frame animation (41 PNG frames, Studio Ghibli-style)
+- **Destination search** — Enter any city worldwide; fetches real places via OpenTripMap
+- **Category vibes** — Filter by All, Nature, Culture, Food, Adventure
+- **Crowd filter** — Quiet / Moderate / Lively, determined by place type heuristics
+- **Keyword search** — Debounced live filtering across name, category, description (Array HOFs only)
+- **Sort** — By rating (high/low) or name (A–Z / Z–A)
+- **Polaroid cards** — Place cards styled as a travel journal with tape effect
+- **Image fallback chain** — OTM preview → Foursquare photo → Wikipedia thumbnail → emoji placeholder
+- **Weather widget** — Real-time temperature + condition at searched destination
+- **Map view** — Toggle to Leaflet map with clickable place markers
+- **Favorites** — Save/unsave places; persists across sessions via localStorage
+- **Trip Roadmap** — Auto-organises saved places into a day-by-day itinerary
+- **Share Trip** — Copies a formatted trip summary to clipboard
+- **Dark mode** — Full light/dark toggle, persists via localStorage
+- **Surprise Me** — Picks a random offbeat Indian destination and searches it
+- **Pagination** — 12 results per page
+- **Responsive** — Works on mobile, tablet, and desktop
 
 ---
 
-## 🛠️ Tech I'm using
+## 🛠️ Tech Stack
 
-Just the basics — no frameworks, no build tools, nothing fancy.
+No frameworks. No build tools. Nothing fancy.
 
-- **HTML + CSS + Vanilla JavaScript** — that's it
-- **Fetch API** for calling OpenTripMap and Foursquare
-- **Array HOFs** — `.filter()`, `.sort()`, `.map()`, `.find()` for all search/filter/sort logic (no for loops!)
-- **localStorage** for saving favorites and dark mode preference
-- **Caveat font** from Google Fonts — gives it that hand-drawn sketch feel
+| Layer | Tech |
+|-------|------|
+| Structure | HTML5 |
+| Styling | Vanilla CSS (custom properties, CSS Grid, Flexbox) |
+| Logic | Vanilla JavaScript (ES6+, IIFEs, Array HOFs) |
+| Maps | Leaflet.js |
+| Fonts | Caveat, Inter, Playfair Display (Google Fonts) |
+| Storage | localStorage |
+| Data | OpenTripMap, Foursquare, wttr.in, Wikipedia, OpenStreetMap |
+
+**Constraint:** All search, filter, and sort logic uses only `.filter()`, `.sort()`, `.map()`, `.reduce()` — no `for` or `while` loops.
 
 ---
 
-## 📁 How the code is organized
+## 📁 Project Structure
 
 ```
-TripSketch/
-├── index.html          # the main page
+tripsketch/
+├── index.html          # Landing + app (SPA — single HTML file)
 ├── css/
-│   └── style.css       # all styles + the doodle aesthetic
+│   ├── landing.css     # Cinematic landing page styles
+│   └── explore.css     # App styles: journal/cream aesthetic + dark mode
 ├── js/
-│   ├── app.js          # main logic and event listeners
-│   ├── api.js          # all API fetch functions
-│   ├── filter.js       # search, filter, sort using HOFs
-│   └── ui.js           # rendering cards and updating the DOM
-├── assets/
-│   └── icons/          # SVG icons for transport, categories etc
+│   ├── landing.js      # Scroll + canvas frame animation engine
+│   ├── api.js          # Fetch wrappers: OpenTripMap, Foursquare, wttr.in, Wikipedia
+│   ├── filter.js       # Search / filter / sort using Array HOFs only
+│   ├── ui.js           # DOM rendering: cards, pagination, panels, toast
+│   └── app.js          # Main controller: state, event listeners, map, favorites
+├── frames/             # 41 PNG animation frames (ezgif-frame-001.png … 041.png)
 └── README.md
 ```
 
 ---
 
-## 🚀 How to run it
+## 🚀 Running Locally
 
-No installs. No setup. Seriously.
+No installs. No setup.
 
-1. Clone the repo
-   ```bash
-   git clone https://github.com/YOUR_USERNAME/tripsketch.git
-   cd tripsketch
-   ```
+```bash
+git clone https://github.com/aryanm25096-dotcom/tripsketch.git
+cd tripsketch
+```
 
-2. Add your API keys in `js/api.js`
-   ```javascript
-   const OPENTRIPMAP_KEY = 'your_key_here';
-   const FOURSQUARE_KEY = 'your_key_here';
-   ```
-   Both are free — get them at opentripmap.io and developer.foursquare.com
+Open `index.html` in your browser — or use VS Code's **Live Server** extension for best results.
 
-3. Open `index.html` in your browser and you're good to go.
-   (VS Code Live Server also works great)
+> The API keys in `api.js` are public demo keys included for convenience. Both OpenTripMap and Foursquare free tiers are sufficient for local development.
 
 ---
 
-## 📅 Project milestones
+## 🌐 Deployment
 
-| | Milestone | Due |
-|--|-----------|-----|
-| ✅ | Setup + planning + this README | 23rd March |
-| 🔲 | API integration + responsive UI | 1st April |
-| 🔲 | Search, filter, sort, dark mode, favorites | 8th April |
-| 🔲 | Final cleanup + deployment | 10th April |
+Deployed via **GitHub Pages** directly from the `main` branch (no build step needed).
+
+A `.nojekyll` file is included at the root so GitHub doesn't run Jekyll preprocessing, which would otherwise ignore the `frames/` directory (filenames with underscores).
+
+To deploy your own fork:
+1. Push to GitHub
+2. Go to **Settings → Pages → Source → Deploy from branch → main / root**
+3. Wait ~60 seconds → your site is live
 
 ---
 
-# tripsketch
+## 📅 Milestones
+
+| | Milestone | Status |
+|--|-----------|--------|
+| ✅ | Setup + planning + README | Done |
+| ✅ | API integration (OpenTripMap + Foursquare + wttr.in) | Done |
+| ✅ | Cinematic landing page with 41-frame scroll animation | Done |
+| ✅ | Place cards, search, filter, sort (HOFs only) | Done |
+| ✅ | Favorites, dark mode, Surprise Me, Map view | Done |
+| ✅ | Trip Roadmap, Share to clipboard, Weather widget | Done |
+| ✅ | Bug fixes, mobile responsive polish | Done |
+| ✅ | Deployed to GitHub Pages | Done |
