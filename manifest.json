@@ -1,0 +1,17 @@
+{
+  "name": "TripSketch",
+  "short_name": "TripSketch",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#1a1610",
+  "theme_color": "#1a1610",
+  "description": "Discover Hidden Journeys. Find offbeat, budget-friendly travel spots.",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4 28 Q8 8 16 14 Q24 20 28 4' stroke='%23d6a978' stroke-width='2.5' fill='none' stroke-linecap='round' /%3E%3Ccircle cx='16' cy='14' r='2.5' fill='%23d6a978' /%3E%3C/svg%3E",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

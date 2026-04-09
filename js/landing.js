@@ -81,9 +81,9 @@
       const endIdx = Math.min(startIdx + BATCH_SIZE, FRAME_COUNT);
       const promises = [];
 
-      for (let i = startIdx; i < endIdx; i++) {
-        promises.push(loadImage(i + 1)); // frames are 1-indexed
-      }
+      Array.from({ length: endIdx - startIdx }).forEach((_, i) => {
+        promises.push(loadImage(startIdx + i + 1)); // frames are 1-indexed
+      });
 
       Promise.all(promises).then(() => {
         if (endIdx < FRAME_COUNT) {
@@ -245,15 +245,31 @@
     rafId = requestAnimationFrame(tick);
   }
 
+  // ---------- Utilities ----------
+  function throttle(func, limit) {
+    let inThrottle;
+    return function() {
+      const args = arguments;
+      const context = this;
+      if (!inThrottle) {
+        func.apply(context, args);
+        inThrottle = true;
+        setTimeout(() => inThrottle = false, limit);
+      }
+    };
+  }
+
   // ---------- Event Listeners ----------
   window.addEventListener('resize', () => {
     resizeCanvas();
   });
 
-  // Passive scroll listener for text updates
-  window.addEventListener('scroll', () => {
+  // Passive scroll listener for text updates (throttled for performance)
+  const throttledUpdateTextSections = throttle(() => {
     updateTextSections();
-  }, { passive: true });
+  }, 16); // ~60fps handling rate
+
+  window.addEventListener('scroll', throttledUpdateTextSections, { passive: true });
 
   // Prevent right-click on canvas
   canvas.addEventListener('contextmenu', (e) => e.preventDefault());

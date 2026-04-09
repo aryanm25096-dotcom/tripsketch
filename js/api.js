@@ -133,15 +133,21 @@ const API = (() => {
     const BATCH  = 5;
     const results = [];
 
-    for (let i = 0; i < list.length; i += BATCH) {
-      const batch = list.slice(i, i + BATCH);
+    const batches = list.reduce((acc, p, i) => {
+      const ch = Math.floor(i / BATCH);
+      acc[ch] = (acc[ch] || []).concat(p);
+      return acc;
+    }, []);
+
+    await batches.reduce(async (prom, batch) => {
+      await prom;
       const built = await Promise.all(
         batch
           .filter(p => p.name && p.name.trim() !== '')
           .map(p => buildPlace(p).catch(() => null))
       );
       results.push(...built.filter(Boolean));
-    }
+    }, Promise.resolve());
 
     return { places: results, geo };
   }

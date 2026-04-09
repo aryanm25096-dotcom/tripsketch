@@ -54,8 +54,9 @@ So I built TripSketch. You tell it where you want to go and what kind of trip yo
 - **Surprise Me** — Picks a random offbeat Indian destination and searches it
 - **Pagination** — 12 results per page
 - **Responsive** — Works on mobile, tablet, and desktop
+- **Throttling & Debouncing** — Optimized event listeners for scrolling and searching
+- **Progressive Web App (PWA)** — Offline caching support and installability
 
----
 
 ## 🛠️ Tech Stack
 
@@ -134,4 +135,4 @@ To deploy your own fork:
 | ✅ | Favorites, dark mode, Surprise Me, Map view | Done |
 | ✅ | Trip Roadmap, Share to clipboard, Weather widget | Done |
 | ✅ | Bug fixes, mobile responsive polish | Done |
-| ✅ | Deployed to GitHub Pages | Done |
+| ✅ | Milestone 4: PWA, Throttling, and Final Deployment | Done |
